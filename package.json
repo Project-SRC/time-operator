@@ -1,0 +1,16 @@
+{
+  "name": "time-operator",
+  "version": "0.0.1",
+  "description": "Open FaaS Function to operate time - Project SRC",
+  "main": "time-operator/handler.py",
+  "repository": "https://github.com/Project-SRC/time-operator",
+  "author": "João Pedro Sconetto",
+  "license": "GPL-3.0-or-later",
+  "private": false,
+  "scripts": {
+    "release": "standard-version"
+  },
+  "devDependencies": {
+    "standard-version": "^7.1.0"
+  }
+}
