@@ -1,0 +1,7 @@
+# Dependencies
+ujson==2.0.3
+numpy==1.18.2
+
+# DevDependencies
+ipdb==0.13.2
+flake8==3.7.9

@@ -3,8 +3,8 @@ provider:
   name: openfaas
   gateway: http://127.0.0.1:8080
 functions:
-  time-operator:
+  time_operator:
     lang: python3
-    handler: ./time-operator
-    image: time-operator:latest
+    handler: ./time_operator
+    image: time_operator:latest
 
