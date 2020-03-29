@@ -63,7 +63,7 @@ To use it:
 
 ```shell
 workon time-op
-pip install -r time-operator/requirements.txt
+pip install -r time_operator/requirements.txt
 ```
 
 **Observaion**: Again, if necessary, add the flag `--user` to make the pipenv package installation for the local user.
@@ -73,7 +73,7 @@ pip install -r time-operator/requirements.txt
 For local system execution, run the following command in the project root folder (assuming _virtualenv_ is already active):
 
 ```shell
-faas-cli deploy time-operator
+faas-cli deploy time_operator
 ```
 
 This will run the system on _localhost_ and will be available on the Open FaaS UI configured for the system. This way you can test new implementations.
@@ -93,10 +93,10 @@ To run the Time Operator tests follow the script below:
 
 ```shell
 export PYTHONPATH=$(pwd)                                      # Set the python path as the project folder
-pytest time-operator/                                         # Performs the tests
-pytest --cov=time-operator time-operator/                     # Performs tests evaluating coverage
-pytest --cov=time-operator --cov-report xml time-operator/    # Generate the XML report of coverage
-flake8 time-operator/                                         # Run PEP8 linter
+pytest time_operator/                                         # Performs the tests
+pytest --cov=time_operator time_operator/                     # Performs tests evaluating coverage
+pytest --cov=time_operator --cov-report xml time_operator/    # Generate the XML report of coverage
+flake8 time_operator/                                         # Run PEP8 linter
 unset PYTHONPATH                                              # Unset PYTHONPATH variable
 ```
 
@@ -109,11 +109,11 @@ During the lint process the terminal will report a bug report and warnings from 
 To build the Time Operator function just follow the script below:
 
 ```shell
-faas-cli build -f time-operator.yml
+faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
 ```
 
 Make sure you have logged in to the [docker hub](https://hub.docker.com/) service. If you do not, run the `docker login` command.
 
 ```shell
-faas-cli push -f time-operator.yml
+faas-cli push -f time_operator.yml
 ```
