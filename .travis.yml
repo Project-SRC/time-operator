@@ -27,6 +27,8 @@ jobs:
     - stage: lint
       script:
         - flake8 time_operator/
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
     - stage: security
       script:
         - bandit -r time_operator -x time_operator/test_handler.py
@@ -34,12 +36,17 @@ jobs:
       if: branch = develop
       script:
         - faas-cli template pull
-        - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++" --tag dev
+        - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++" --tag describe
     - stage: build_prod
       if: branch = master
       script:
         - faas-cli template pull
         - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
+    - stage: deploy_image
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - faas-cli push -f time_operator.yml
+
 
 script:
   - export PYTHONPATH=$(pwd)
@@ -47,9 +54,3 @@ script:
   - pytest --cov=time_operator time_operator/
   - pytest --cov=time_operator --cov-report xml time_operator/
   - unset PYTHONPATH
-
-before_deploy:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-deploy:
- - faas-cli push -f time_operator.yml
