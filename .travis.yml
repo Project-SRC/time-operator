@@ -1,34 +1,35 @@
 dist: bionic
 language: python
 python:
-    - "3.7"
-    - "3.8"
+  - "3.7"
+  - "3.8"
 
 cache:
   directories:
     - "$HOME/.npm"
 
 before_install:
-    - npm install
+  - npm install
 
 install:
-    - curl -sSL https://cli.openfaas.com | sudo -E sh
-    - pip install -U pip
-    - pip install -r time_operator/dev_requirements.txt
-    - pip install -r time_operator/requirements.txt
+  - curl -sSL https://cli.openfaas.com | sudo -E sh
+  - pip install -U pip
+  - pip install -r time_operator/dev_requirements.txt
+  - pip install -r time_operator/requirements.txt
 
 jobs:
-    include:
-        - stage: lint
-          script: flake8 time_operator/
-        - stage: test
-          script:
-            export PYTHONPATH=$(pwd) &&
-            pytest time_operator/ &&
-            pytest --cov=time_operator time_operator/ &&
-            pytest --cov=time_operator --cov-report xml time_operator/ &&
-            unset PYTHONPATH
-        - stage: build
-          script:
-            faas-cli template pull &&
-            faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
+  include:
+    - stage: lint
+      script:
+        - flake8 time_operator/
+    - stage: build
+      script:
+        - faas-cli template pull
+        - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
+
+script:
+  - export PYTHONPATH=$(pwd)
+  - pytest time_operator/
+  - pytest --cov=time_operator time_operator/
+  - pytest --cov=time_operator --cov-report xml time_operator/
+  - unset PYTHONPATH
