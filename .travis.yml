@@ -1,0 +1,25 @@
+dist: bionic
+language: python
+python:
+    - "3.7"
+    - "3.8"
+
+install:
+    - curl -sSL https://cli.openfaas.com | sudo -E sh
+    - pip install -U pip
+    - pip install -r time_operator/dev_requirements.txt
+    - pip install -r time_operator/requirements.txt
+
+before_script:
+    - faas-cli template pull
+
+script:
+    - export PYTHONPATH=$(pwd)
+    - flake8 time_operator/
+    - pytest time_operator/
+    - pytest --cov=time_operator time_operator/
+    - pytest --cov=time_operator --cov-report xml time_operator/
+    - unset PYTHONPATH
+
+after_succes:
+    - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
