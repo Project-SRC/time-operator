@@ -6,5 +6,5 @@ functions:
   time_operator:
     lang: python3
     handler: ./time_operator
-    image: time_operator:latest
+    image: sconetto/time_operator:latest
 
