@@ -1,5 +1,8 @@
 # Time Operator - Project SRC - OpenFaaS Function
 
+[![codecov](https://codecov.io/gh/Project-SRC/time-operator/branch/develop/graph/badge.svg)](https://codecov.io/gh/Project-SRC/time-operator)
+[![Build Status](https://travis-ci.com/Project-SRC/time-operator.svg?branch=develop)](https://travis-ci.com/Project-SRC/time-operator)
+
 The Time Operator is responsible to operate the time mathematically for the Project SRC stack.
 
 ## Dependencies
