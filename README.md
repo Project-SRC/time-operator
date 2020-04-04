@@ -112,7 +112,7 @@ During the lint process the terminal will report a bug report and warnings from 
 To build the Time Operator function just follow the script below:
 
 ```shell
-faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
+faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="libstdc++ g++"
 ```
 
 Make sure you have logged in to the [docker hub](https://hub.docker.com/) service. If you do not, run the `docker login` command.
