@@ -1,8 +1,13 @@
 dist: bionic
+
 language: python
+
 python:
   - "3.7"
   - "3.8"
+
+services:
+  - docker
 
 cache:
   directories:
@@ -22,7 +27,16 @@ jobs:
     - stage: lint
       script:
         - flake8 time_operator/
-    - stage: build
+    - stage: security
+      script:
+        - bandit -r time_operator -x time_operator/test_handler.py
+    - stage: build_dev
+      if: branch = develop
+      script:
+        - faas-cli template pull
+        - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++" --tag dev
+    - stage: build_prod
+      if: branch = master
       script:
         - faas-cli template pull
         - faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
@@ -33,3 +47,9 @@ script:
   - pytest --cov=time_operator time_operator/
   - pytest --cov=time_operator --cov-report xml time_operator/
   - unset PYTHONPATH
+
+before_deploy:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+deploy:
+ - faas-cli push -f time_operator.yml
