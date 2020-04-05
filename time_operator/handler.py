@@ -1,13 +1,10 @@
 from datetime import timedelta
-from json import JSONDecodeError
 from re import compile
 from typing import List
 
 import operator as op
 import numpy as np
-import json
-# TODO: add ujson after check the build issue with alpine and pep517
-# import ujson as json
+import ujson as json
 
 Times = List[timedelta]
 
@@ -128,7 +125,7 @@ def operate(operation: str, binary: bool, times: list, base: int) -> Times:
             a, b = sorted(times, reverse=True)
             result = [OPERATIONS[operation](a, b)]
         elif operation in ['/'] and not base:
-            a, b = times
+            a, b = sorted(times, reverse=True)
             result = [timedelta(seconds=OPERATIONS[operation](a, b))]
         elif base:
             result = [OPERATIONS[operation](np.array(times), base)]
@@ -203,7 +200,7 @@ def handle(req):
         # Decode times from timedelta to string (JSON decodable)
         result = [decode_timedelta(time) for time in result]
 
-    except JSONDecodeError as exception:
+    except ValueError as exception:
         message = (f'Error trying to load input JSON.\nMalformed JSON.'
                    f'Traceback: {exception}')
         response = create_response(
