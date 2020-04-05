@@ -127,11 +127,12 @@ def operate(operation: str, binary: bool, times: list, base: int) -> Times:
         if operation in ['+', '-'] and not base:
             a, b = sorted(times, reverse=True)
             result = [OPERATIONS[operation](a, b)]
+        elif operation in ['/'] and not base:
+            a, b = times
+            result = [timedelta(seconds=OPERATIONS[operation](a, b))]
         elif base:
             result = [OPERATIONS[operation](np.array(times), base)]
         else:
-            # TODO: create operation with '/' to check how many times a time is
-            # greater than the other
             raise OperationNotSupported(f'The operation \'{operation}\' is not'
                                         f' supported for binary operations')
     else:

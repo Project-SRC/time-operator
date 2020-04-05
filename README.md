@@ -5,6 +5,105 @@
 
 The Time Operator is responsible to operate the time mathematically for the Project SRC stack.
 
+## Usage
+
+Time Operator function is built using OpenFaaS framework, it expects a POST JSON request in the following format:
+
+```json
+{
+    "operation": String,
+    "binary": Bool,
+    "times": List[String],
+    "base": Int/Float
+}
+```
+
+- **operation (String)**:
+
+In this field is expected a string with the operation you want to do with the times.
+Allowed operations are `+`, `-`, `*`, `/`.
+
+- **binary (Boolean)**:
+
+In this field is expected a boolean (`true` /` false`), to tell the function that the operation will occur between two times.
+
+- **times (List[String])**:
+
+In this field is expected a list of strings, which are the times that will be calculated.
+A valid time string is:
+
+```shell
+HHH:MM:SS.mmm
+```
+
+    - `HHH`: Hours -> this value is optional and can go from 0 to infinty.
+    - `MM`: Minutes -> this value is optinal and can go from 0 to 59.
+    - `SS`: Seconds -> this value is mandatory and can go from 0 to 59.
+    - `mmm`: Miliseconds -> this value is mandatory and can go from 0 to 999.
+
+In case you don't want to send Hours or Minutes remove the colon for those values in the time string:
+
+```shell
+:MM:SS.mmm - ✗ WRONG
+MM:SS.mmm - ✔ RIGHT
+```
+
+- **base (Int/Float)**:
+
+In this field is expected an Int or a Float number, which is used if you're operating a non-binary calculation.
+The base number will be calculate to every time on the list.
+
+Example:
+
+```json
+{
+    "operation": "+",
+    "binary": false,
+    "times": [
+        "1:10.540",
+        "12:24.578",
+        "23:10:10.789",
+        "59.780",
+        "01.487",
+        "187:07:12.780"
+    ],
+    "base": 15
+}
+```
+
+Response example:
+
+```json
+{
+  "code": 200,
+  "data": {
+    "times": [
+      "0:01:25.540",
+      "0:12:39.578",
+      "23:10:25.789",
+      "0:01:14.780",
+      "0:00:16.487",
+      "187:07:27.780"
+    ]
+  },
+  "message": "😀 Successful execution!"
+}
+```
+
+### Observations
+
+You can obtain the division between two race times to verify how many times a race time is greater or lesser than the other.
+For that use a binary operation and the `/` operator.
+The result will be sent back in time format. To get the float result just parse the time to a python `timedelta` object and get the seconds:
+
+```python
+timedelta(parsed_times).total_seconds()
+```
+
+Operations with negative results will be setted to 0.
+
+Only `+` and `-` operators are allowed on a non-binary operation without a base, and the result will be accumulated to only one time.
+
 ## Dependencies
 
 - Python 3.7.6
@@ -69,6 +168,12 @@ workon time-op
 pip install -r time_operator/requirements.txt
 ```
 
+For development dependencies (as lint package and tests frameworks) run:
+
+```shell
+pip install -r time_operator/dev_requirements.txt
+```
+
 **Observaion**: Again, if necessary, add the flag `--user` to make the pipenv package installation for the local user.
 
 ### Local Execution
@@ -120,3 +225,5 @@ Make sure you have logged in to the [docker hub](https://hub.docker.com/) servic
 ```shell
 faas-cli push -f time_operator.yml
 ```
+
+**Observaion**: Make sure to change the `time_operator.yml` file, so the image name uses your docker hub account username instead of `sconetto`.
