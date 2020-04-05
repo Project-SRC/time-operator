@@ -36,10 +36,10 @@ A valid time string is:
 HHH:MM:SS.mmm
 ```
 
-    - `HHH`: Hours -> this value is optional and can go from 0 to infinty.
-    - `MM`: Minutes -> this value is optinal and can go from 0 to 59.
-    - `SS`: Seconds -> this value is mandatory and can go from 0 to 59.
-    - `mmm`: Miliseconds -> this value is mandatory and can go from 0 to 999.
+  - `HHH`: Hours -> this value is optional and can go from 0 to infinty.
+  - `MM`: Minutes -> this value is optinal and can go from 0 to 59.
+  - `SS`: Seconds -> this value is mandatory and can go from 0 to 59.
+  - `mmm`: Miliseconds -> this value is mandatory and can go from 0 to 999.
 
 In case you don't want to send Hours or Minutes remove the colon for those values in the time string:
 
@@ -217,7 +217,7 @@ During the lint process the terminal will report a bug report and warnings from 
 To build the Time Operator function just follow the script below:
 
 ```shell
-faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="libstdc++ g++"
+faas-cli build -f time_operator.yml --build-arg ADDITIONAL_PACKAGE="python3-dev libstdc++ g++"
 ```
 
 Make sure you have logged in to the [docker hub](https://hub.docker.com/) service. If you do not, run the `docker login` command.
