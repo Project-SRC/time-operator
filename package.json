@@ -1,6 +1,6 @@
 {
   "name": "time_operator",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "description": "Open FaaS Function to operate time - Project SRC",
   "main": "time_operator/handler.py",
   "repository": "https://github.com/Project-SRC/time-operator",
@@ -11,6 +11,6 @@
     "release": "standard-version"
   },
   "devDependencies": {
-    "standard-version": "^7.1.0"
+    "standard-version": "^9.0.0"
   }
 }
